@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Star } from "lucide-react";
 import { useLanguage } from "@/LanguageContext";
 
@@ -14,15 +14,16 @@ const destinations = [
 
 const DestinationsSection = () => {
   const { t } = useLanguage();
+  const reduceMotion = useReducedMotion();
 
   return (
     <section id="destinations" className="scroll-mt-24 bg-background py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-6">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+          whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: reduceMotion ? 0 : 0.5 }}
           className="mb-10 flex flex-col gap-5 md:mb-14 md:flex-row md:items-end md:justify-between"
         >
           <div className="max-w-2xl">
@@ -43,10 +44,10 @@ const DestinationsSection = () => {
           {destinations.map((dest, index) => (
             <motion.article
               key={dest.title}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+              whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: index * 0.08 }}
+              transition={{ duration: reduceMotion ? 0 : 0.5, delay: reduceMotion ? 0 : index * 0.08 }}
               className="group relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-secondary shadow-lg shadow-secondary/10"
             >
               <img
