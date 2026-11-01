@@ -96,7 +96,7 @@ export default function Payment() {
   const showErrorBorder = error && !utr && !screenshot;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="page-shell">
       <Navbar />
 
       <div className="pt-24">
@@ -119,7 +119,7 @@ export default function Payment() {
 
         <form
           onSubmit={handleSubmit}
-          className="max-w-md mx-auto space-y-6"
+          className="form-panel mx-auto mt-8 max-w-lg space-y-6"
         >
           <QRCodeSVG
             value={upiUrl}

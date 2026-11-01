@@ -12,7 +12,7 @@ export default function TermsAndConditions() {
 
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="page-shell">
       <Navbar />
       <div className="pt-24">
         <div className="container mx-auto px-4">
@@ -22,11 +22,11 @@ export default function TermsAndConditions() {
         </div>
       </div>
       <div>
-        <div className="space-y-4 border rounded-lg p-4">
+        <div className="form-panel space-y-6">
           <h2 className="text-lg font-semibold">{lang === "en" ? "Terms And Conditions" : "ಬಳಕೆಯ ನಿಯಮಗಳು"}</h2>
 
           {/* Terms text */}
-          <div className=" text-sm text-gray-600 space-y-2">
+          <div className="space-y-4 text-sm leading-7 text-muted-foreground md:text-base">
             <p>
               {lang === "en" ? "By participating in this community activity, you confirm that your involvement is voluntary and based on your own decision." : "ಈ ಸಮುದಾಯ ಚಟುವಟಿಕೆಯಲ್ಲಿ ಭಾಗವಹಿಸುವ ಮೂಲಕ, ನಿಮ್ಮ ಭಾಗವಹಿಸುವಿಕೆ ಸಂಪೂರ್ಣವಾಗಿ ಸ್ವಯಂಪ್ರೇರಿತವಾಗಿದ್ದು ನಿಮ್ಮ ಸ್ವಂತ ನಿರ್ಧಾರದ ಮೇಲೆ ಆಧಾರಿತವಾಗಿದೆ ಎಂದು ನೀವು ದೃಢಪಡಿಸುತ್ತೀರಿ."}
             </p>

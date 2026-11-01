@@ -1,78 +1,72 @@
-import { motion } from "framer-motion";
-import { MapPin, Star, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { motion, useReducedMotion } from "framer-motion";
+import { Star } from "lucide-react";
+import { useLanguage } from "@/LanguageContext";
+
 import destLake from "@/assets/Adv sports.jpg";
 import documentriess from "@/assets/documentriess.jpg";
 import publications from "@/assets/publications.jpg";
-import { useLanguage } from "@/LanguageContext";
 
 const destinations = [
-  {
-    title: "Adventure Sports",
-    rating: 4.9,
-    image: destLake,
-  },
-  {
-    title: "Publications",
-    rating: 4.8,
-    image: publications,
-  },
-  {
-    title: "Documentries",
-    rating: 4.8,
-    image: documentriess,
-  }, 
+  { title: "Adventure Sports", rating: 4.9, image: destLake },
+  { title: "Publications", rating: 4.8, image: publications },
+  { title: "Documentries", rating: 4.8, image: documentriess },
 ];
 
 const DestinationsSection = () => {
-  const { t, toggleLang, lang } = useLanguage();
+  const { t } = useLanguage();
+  const reduceMotion = useReducedMotion();
+
   return (
-    <section id="destinations" className="py-6 bg-background">
-      <div className="container mx-auto px-4">
+    <section id="destinations" className="scroll-mt-24 bg-background py-20 sm:py-24">
+      <div className="mx-auto max-w-7xl px-5 sm:px-6">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-10"
+          initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+          whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: reduceMotion ? 0 : 0.5 }}
+          className="mb-10 flex flex-col gap-5 md:mb-14 md:flex-row md:items-end md:justify-between"
         >
-          <span className="text-primary font-semibold uppercase tracking-widest text-sm font-body">
-            {t("ourDestinations")}
-          </span>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mt-1">
-            {t("findEscape")}
-          </h2>
-          <p className="text-muted-foreground mt-4 max-w-2xl mx-auto font-body text-lg">
+          <div className="max-w-2xl">
+            <span className="mb-3 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-olive">
+              <span className="h-px w-7 bg-primary" aria-hidden="true" />
+              {t("ourDestinations")}
+            </span>
+            <h2 className="font-display text-4xl font-semibold leading-tight tracking-tight text-foreground sm:text-5xl md:text-6xl">
+              {t("findEscape")}
+            </h2>
+          </div>
+          <p className="max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
             {t("handpicked")}
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {destinations.map((dest, i) => (
-            <motion.div
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {destinations.map((dest, index) => (
+            <motion.article
               key={dest.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="group bg-card rounded-xl overflow-hidden border border-border hover:shadow-xl transition-all duration-300"
+              initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+              whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: reduceMotion ? 0 : 0.5, delay: reduceMotion ? 0 : index * 0.08 }}
+              className="group relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-secondary shadow-lg shadow-secondary/10"
             >
-              <div className="relative h-56 overflow-hidden">
-                <img
-                  src={dest.image}
-                  alt={dest.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
+              <img
+                src={dest.image}
+                alt={dest.title}
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-secondary/90 via-secondary/20 to-transparent" />
+              <div className="absolute right-5 top-5 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-secondary/35 px-3 py-1.5 text-sm font-semibold text-white backdrop-blur-md">
+                <Star className="h-4 w-4 text-primary" fill="currentColor" aria-hidden="true" />
+                {dest.rating}
               </div>
-              <div className="p-5 flex items-center justify-between">
-                <h3 className="font-display text-xl font-semibold text-card-foreground">{dest.title}</h3>
-                <div className="">
-                  <div className="flex items-center gap-1">
-                    <Star className="h-4 w-4 text-warm-gold" fill="currentColor" />
-                    <span className="text-sm font-semibold text-card-foreground">{dest.rating}</span>
-                  </div>
-                </div>
+              <div className="absolute inset-x-0 bottom-0 p-6 sm:p-7">
+                <h3 className="font-display text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+                  {dest.title}
+                </h3>
               </div>
-            </motion.div>
+            </motion.article>
           ))}
         </div>
       </div>

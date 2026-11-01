@@ -8,18 +8,18 @@ import { useLanguage } from "@/LanguageContext";
 const ContactSection = () => {
   const { t, toggleLang, lang } = useLanguage();
   return (
-    <section id="contact" className="py-24 bg-background">
+    <section id="contact" className="bg-background py-20 md:py-28">
       <div className="container mx-auto px-4">
-        <div className="grid lg:grid-cols-2 gap-16">
+        <div className="grid items-center gap-12 lg:grid-cols-[.9fr_1.1fr] lg:gap-20">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-primary font-semibold uppercase tracking-widest text-sm font-body">
+            <span className="eyebrow font-body">
               {t("getInTouch")}
             </span>
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mt-3 mb-6">
+            <h2 className="mt-4 mb-6 font-display text-4xl font-bold text-foreground md:text-6xl">
               {t("ready")}
             </h2>
             <p className="text-muted-foreground font-body text-lg mb-10">
@@ -62,8 +62,8 @@ const ContactSection = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <form className="bg-card rounded-2xl p-8 border border-border space-y-5">
-              <div className="grid grid-cols-2 gap-4">
+            <form className="form-panel space-y-5">
+              <div className="grid gap-4 sm:grid-cols-2">
                 <Input placeholder="Your Name" className="bg-background" />
                 <Input type="email" placeholder="Email Address" className="bg-background" />
               </div>

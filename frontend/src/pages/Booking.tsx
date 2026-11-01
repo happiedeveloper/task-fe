@@ -131,7 +131,7 @@ const Booking = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="page-shell">
       {isLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md bg-black/40">
           <div className="flex flex-col items-center gap-4 text-white">
@@ -145,7 +145,7 @@ const Booking = () => {
       )}
       <Navbar />
       <div className="pt-24 pb-24">
-        <div className="container mx-auto px-4 max-w-2xl">
+        <div className="container mx-auto max-w-3xl px-4">
           <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary mb-4 font-body">
             <ArrowLeft className="h-4 w-4" /> {t("BacktoHome")}
           </Link>
@@ -161,7 +161,7 @@ const Booking = () => {
               {t("fillindetails")}
             </p>
 
-            <form onSubmit={handleSubmit} className="bg-card rounded-2xl p-8 border border-border space-y-6">
+            <form onSubmit={handleSubmit} className="form-panel space-y-6">
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-semibold text-foreground font-body mb-1 block">{t("FullName")}</label>

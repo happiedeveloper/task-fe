@@ -41,7 +41,7 @@ export default function GettingTouch() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-background">
+        <div className="page-shell">
             <Navbar />
 
             <div className="pt-24">
@@ -55,8 +55,8 @@ export default function GettingTouch() {
                 </div>
             </div>
 
-            <div className="container mx-auto px-4 py-12">
-                <h2 className="text-2xl mb-6">
+            <div className="page-content py-16 md:py-24">
+                <h2 className="surface-card mx-auto mb-8 max-w-3xl p-7 text-2xl leading-relaxed md:p-12">
                     {lang === "kn" ? (
                         <>
                             ನಮಸ್ತೆ <strong>{name}</strong> ಅವರೆ <br />

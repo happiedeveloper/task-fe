@@ -31,7 +31,7 @@ const docs = [
 const ImageSwiper = () => {
   const { t, toggleLang, lang } = useLanguage();
   return (
-    <section id="gallery" className="bg-background mb-10">
+    <section id="gallery" className="mb-16 bg-background py-10 md:mb-24">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -39,7 +39,7 @@ const ImageSwiper = () => {
           viewport={{ once: true }}
           className="text-center mb-4"
         >
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mt-4 mb-0 pb-0">
+          <h2 className="font-display text-4xl font-bold text-foreground md:text-6xl">
             {t("ourGallery")}
           </h2>
         </motion.div>

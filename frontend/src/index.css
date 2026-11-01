@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,10 +6,10 @@
 
 @layer base {
   :root {
-    --background: 40 33% 97%;
+    --background: 42 30% 96%;
     --foreground: 160 10% 15%;
 
-    --card: 40 30% 95%;
+    --card: 0 0% 100%;
     --card-foreground: 160 10% 15%;
 
     --popover: 40 33% 97%;
@@ -30,11 +30,11 @@
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 40 15% 85%;
+    --border: 38 16% 87%;
     --input: 40 15% 85%;
     --ring: 72 55% 45%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
     --sidebar-background: 160 30% 15%;
     --sidebar-foreground: 40 30% 95%;
@@ -93,16 +93,30 @@
 
   body {
     @apply bg-background text-foreground font-sans;
+    font-family: 'DM Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
+  ::selection { background: hsl(var(--primary) / .24); }
+
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: -0.03em;
   }
+}
+
+@layer components {
+  .surface-card { @apply rounded-3xl border border-border/70 bg-card shadow-[0_18px_55px_-35px_rgba(21,43,34,.32)]; }
+  .eyebrow { @apply text-xs font-bold uppercase tracking-[.2em] text-primary; }
+  .page-shell { @apply min-h-screen bg-background; }
+  .page-content { @apply container mx-auto max-w-6xl px-4 sm:px-6; }
+  .form-panel { @apply rounded-3xl border border-border/70 bg-card p-5 shadow-[0_18px_55px_-35px_rgba(21,43,34,.32)] sm:p-8; }
 }
 
 @layer utilities {
   .font-display {
-    font-family: 'Playfair Display', serif;
+    font-family: 'DM Sans', sans-serif;
   }
   .font-body {
     font-family: 'DM Sans', sans-serif;

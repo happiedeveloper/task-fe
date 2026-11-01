@@ -23,7 +23,7 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="page-shell">
           <Navbar />
       <div className="pt-20">
         <div className="container mx-auto px-4 max-w-2xl">
@@ -34,7 +34,7 @@ export default function AdminLogin() {
           </div>
           
     <div className="flex md:items-center justify-center">
-      <div className="bg-card rounded-xl border border-border p-8 max-w-md w-full">
+      <div className="form-panel w-full max-w-md">
         <h1 className="font-display text-2xl font-bold text-card-foreground mb-6">Admin Login</h1>
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>

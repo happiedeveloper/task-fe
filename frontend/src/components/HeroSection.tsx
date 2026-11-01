@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, MapPin, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -6,87 +6,80 @@ import { useLanguage } from "@/LanguageContext";
 import heroVideo from "@/assets/heroVid.mp4";
 
 const HeroSection = () => {
-  const { t, lang, toggleLang } = useLanguage();
+  const { t, lang } = useLanguage();
+  const reduceMotion = useReducedMotion();
+
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden mb-16">
-      <div className="absolute inset-0">
+    <section className="relative isolate flex min-h-[92svh] items-center overflow-hidden bg-secondary text-secondary-foreground">
+      <div className="absolute inset-0 -z-10">
         <video
-          className="w-full h-full object-cover"
+          className="h-full w-full object-cover"
           src={heroVideo}
-          autoPlay
+          autoPlay={!reduceMotion}
           loop
           muted
           playsInline
+          preload="metadata"
+          aria-hidden="true"
+          tabIndex={-1}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-secondary/50 via-secondary/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-secondary via-secondary/75 to-secondary/20" />
+        <div className="absolute inset-0 bg-gradient-to-t from-secondary/55 via-transparent to-secondary/20" />
       </div>
 
-      <div className="relative container mx-auto px-4 pt-24">
-        <div className="max-w-2xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex items-center gap-2 mb-6"
-          >
-            <span className="inline-flex items-center gap-1 bg-primary/100 px-4 py-1.5 rounded-full text-sm font-semibold">
-              <Star className="h-4 w-4" fill="currentColor" /> {t("topRated")}
-            </span>
-          </motion.div>
+      <div className="container mx-auto max-w-7xl px-6 pb-24 pt-32 md:pb-28">
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0, y: 22 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: reduceMotion ? 0 : 0.7, ease: "easeOut" }}
+          className="max-w-5xl"
+        >
+          <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white shadow-lg shadow-black/10 backdrop-blur-md">
+            <Star className="h-4 w-4 text-primary" fill="currentColor" aria-hidden="true" />
+            {t("topRated")}
+          </div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className={`font-display text-2xl md:text-5xl font-bold text-secondary-foreground leading-tight mb-6`}
-          >
+          <h1 className={"max-w-5xl font-display text-5xl font-semibold leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-8xl " + (lang === "kn" ? "lg:text-7xl" : "")}>
             {t("discover")}{" "}
-            <span className="text-secondary-foreground" >{t("luxuryCamping")}</span>
-          </motion.h1>
+            <span className="text-primary">{t("luxuryCamping")}</span>
+          </h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-secondary-foreground/70 text-lg md:text-xl mb-8 max-w-lg font-body"
-          >
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg md:text-xl">
             {t("explore")}
-          </motion.p>
+          </p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="flex flex-wrap gap-4"
-          >
-            <Link to="/booking">
-              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-olive-light font-semibold text-lg px-8 py-6 gap-2">
-                {t("bookAdventure")} <ArrowRight className="h-5 w-5" />
-              </Button>
-            </Link>
-            <a href="#destinations" className="hidden">
-              <Button size="lg" variant="outline" className="border-secondary-foreground/30 text-secondary-foreground hover:bg-secondary-foreground/10 text-lg px-8 py-6">
-                {t("exploreDestinations")}
-              </Button>
-            </a>
-          </motion.div>
+          <div className="mt-9 flex flex-wrap gap-3">
+            <Button
+              asChild
+              size="lg"
+              className="h-14 rounded-full bg-primary px-7 text-base font-semibold text-primary-foreground shadow-xl shadow-black/20 transition-transform hover:-translate-y-0.5 hover:bg-olive-light sm:text-lg"
+            >
+              <Link to="/booking">
+                {t("bookAdventure")}
+                <ArrowRight className="h-5 w-5" aria-hidden="true" />
+              </Link>
+            </Button>
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="h-14 rounded-full border-white/30 bg-white/5 px-7 text-base font-semibold text-white backdrop-blur-sm hover:bg-white/15 hover:text-white sm:text-lg"
+            >
+              <a href="#destinations">{t("exploreDestinations")}</a>
+            </Button>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.7, delay: 0.5 }}
-            className="flex items-center gap-6 mt-12"
-          >
-            <div className="flex items-center gap-2 text-secondary-foreground/60">
-              <MapPin className="h-5 w-5 text-primary" />
-              <span className="font-body">{t("exclusive")}</span>
+          <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-white/20 pt-6 text-sm text-white/80">
+            <div className="flex items-center gap-2">
+              <MapPin className="h-4 w-4 text-primary" aria-hidden="true" />
+              <span>{t("exclusive")}</span>
             </div>
-            <div className="flex items-center gap-2 text-secondary-foreground/60">
-              <Star className="h-5 w-5 text-warm-gold" fill="currentColor" />
-              <span className="font-body">4.9 Rating</span>
+            <div className="flex items-center gap-2">
+              <Star className="h-4 w-4 text-primary" fill="currentColor" aria-hidden="true" />
+              <span>4.9 Rating</span>
             </div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
