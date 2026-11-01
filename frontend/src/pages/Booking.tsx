@@ -14,6 +14,7 @@ import { set, setDate } from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.jpg";
+import { API_BASE_URL } from "@/lib/api";
 
 const destinations = [
   { value: "Adventure Sports", label: "Adventure Sports — ₹4,500", },
@@ -69,7 +70,7 @@ const Booking = () => {
   const value = async () => {
     try {
       setIsLoading(true);
-      let diff = 1;
+      const diff = 1;
       // if (new Date(formData.checkout).getTime() === new Date(formData.checkin).getTime()) {
       //   diff = 1;
       // } else {
@@ -93,9 +94,7 @@ const Booking = () => {
         })),
       };
 
-      const url = `https://task-fe-75yw.onrender.com/api/create-order`;
-      const url1 = `http://localhost:5000/api/create-order`;
-      const val = await fetch(url, {
+      const val = await fetch(`${API_BASE_URL}/api/create-order`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -107,6 +106,7 @@ const Booking = () => {
       if (val.ok) {
         setTimeout(() => {
           localStorage.setItem("bookingId", data.booking._id);
+          localStorage.setItem("bookingAccessToken", data.accessToken);
           navigate("/terms&conditions");
         }, 100);
       } else {
@@ -372,3 +372,4 @@ const Booking = () => {
 };
 
 export default Booking;
+

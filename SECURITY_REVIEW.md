@@ -57,3 +57,20 @@ Scope: frontend and backend in this repository. This is an initial static review
 - Do not push to or modify the original owner's repository.
 - Do not copy real credentials into issues, docs, commits or test fixtures.
 - Do not claim the application is secure until the relevant tests and deployment checks pass.
+
+## Modernization changes on `feat/2026-ui-security-modernization`
+
+- Admin login uses Supabase Auth. Backend requests validate bearer access tokens against the configured Supabase project and allow administrators only through trusted `app_metadata.role=admin` or the server-side `SUPABASE_ADMIN_USER_IDS` allowlist. User-editable metadata is ignored.
+- Booking details and proof submission require a random per-booking capability token; only its SHA-256 digest is stored. Admin APIs and private screenshot reads require administrator authentication. Uploads are size-limited and checked against PNG/JPEG/WebP/GIF signatures, stored under generated names, and are no longer served as public static files.
+- Booking amounts are calculated on the server from the allowed destination rates and guest count. Admin updates accept only a status field, request bodies are bounded, and CORS uses the configured origin allowlist.
+- `/api/verify-payment` is admin-only and refuses confirmation emails until a booking has status `paid`. The manual UPI proof flow does not verify a provider transaction or automatically set `paid`; configure a real webhook or manual verification workflow before treating a booking as paid.
+
+## Required deployment actions and remaining risks
+
+- Rotate the SMTP application password previously committed in `backend/routes/bookingRoutes.js`; treat it as compromised and revoke the old credential. Revoke the former `ADMIN_SECRET`, reset the hard-coded administrator password anywhere it was reused, and rotate any real credentials from the previously tracked `.env` files. Configure `EMAIL_USER`, `EMAIL_PASS`, `EMAIL_FROM`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_ADMIN_USER_IDS`, `CORS_ORIGINS`, `MONGO_URI`, and a private upload storage path in the deployment environment. Keep secrets out of Vite variables.
+- Assign trusted administrator IDs through Supabase server-managed app metadata or the server allowlist. A valid Supabase user without either assignment is intentionally denied.
+- Existing bookings created before this change have no booking capability token; their payment details cannot be read or changed through the new public booking endpoints. Establish an authenticated admin-only remediation process.
+- Local filesystem upload storage may be ephemeral on the deployment host. Configure durable private storage and backups before relying on payment proof retention.
+- Razorpay order creation/signature verification remains unimplemented; the manual payment workflow needs a trusted payment review step. Review the static service rates against the business pricing source before release.
+- For Vercel, set the project Root Directory to `frontend`, build command to `npm run build`, and output directory to `dist` (also recorded in `frontend/vercel.json`). Add `VITE_API_BASE_URL` with the separately hosted API origin, plus `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`, for Production and the desired Preview environments. Set the backend `CORS_ORIGINS` to the production Vercel hostname and only the preview hostnames you trust. The Express API remains a separate service; Vercel configuration alone does not migrate it.
+

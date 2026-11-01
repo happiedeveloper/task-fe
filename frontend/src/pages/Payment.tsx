@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { QRCodeSVG } from "qrcode.react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "@/lib/api";
 
 export default function Payment() {
   const { t, lang, toggleLang } = useLanguage();
@@ -29,14 +30,12 @@ export default function Payment() {
   useEffect(() => {
 
     async function fetchBooking() {
-      const url = "https://task-fe-75yw.onrender.com";
-      const url1 = "http://localhost:5000";
-
       try {
-        const resp = await fetch(`${url}/api/booking/${bookingId}`, {
+        const resp = await fetch(`${API_BASE_URL}/api/booking/${bookingId}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("bookingAccessToken") || ""}`,
           },
         });
 
@@ -68,9 +67,6 @@ export default function Payment() {
     setError(false);
     setLoading(true);
 
-    const url = "https://task-fe-75yw.onrender.com";
-    const url1 = "http://localhost:5000";
-
     const formData = new FormData();
     formData.append("utr", utr);
     if (screenshot) {
@@ -78,8 +74,9 @@ export default function Payment() {
     }
 
     try {
-      const resp = await fetch(`${url}/api/booking/${bookingId}`, {
+      const resp = await fetch(`${API_BASE_URL}/api/booking/${bookingId}`, {
         method: "PATCH",
+        headers: { Authorization: `Bearer ${localStorage.getItem("bookingAccessToken") || ""}` },
         body: formData,
       });
 
@@ -170,3 +167,4 @@ export default function Payment() {
     </div>
   );
 }
+

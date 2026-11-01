@@ -13,7 +13,7 @@ export default function SwiperCarousal({ docs }) {
   const swiperRef = useRef(null);
 
   const handleSlideChange = () => {
-    const videos = document.querySelectorAll('.swiper-slide video');
+    const videos = document.querySelectorAll<HTMLVideoElement>('.swiper-slide video');
 
     videos.forEach((video) => {
       video.pause();
@@ -62,3 +62,4 @@ export default function SwiperCarousal({ docs }) {
     </Swiper>
   );
 }
+

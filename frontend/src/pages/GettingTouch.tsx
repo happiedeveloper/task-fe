@@ -13,6 +13,7 @@ import { totalmem } from "os";
 import { set, setDate } from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "@/lib/api";
 
 export default function GettingTouch() {
     const { t, toggleLang, lang } = useLanguage();
@@ -24,7 +25,9 @@ export default function GettingTouch() {
     const bookingId = localStorage.getItem("bookingId");
 
     useEffect(() => {
-        fetch(`https://task-fe-75yw.onrender.com/api/booking/${bookingId}`)
+        fetch(`${API_BASE_URL}/api/booking/${bookingId}`, {
+            headers: { Authorization: `Bearer ${localStorage.getItem("bookingAccessToken") || ""}` },
+        })
             .then((res) => res.json())
             .then((data) => {
                 setName(data.booking.name);
@@ -88,7 +91,9 @@ export default function GettingTouch() {
             </Button>
             <Footer />
             localStorage.removeItem("bookingId");
+            localStorage.removeItem("bookingAccessToken");
         </div>
     )
 
 }
+
