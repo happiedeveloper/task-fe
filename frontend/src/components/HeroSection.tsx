@@ -15,7 +15,7 @@ const HeroSection = () => {
         <video
           className="h-full w-full object-cover"
           src={heroVideo}
-          autoPlay
+          autoPlay={!reduceMotion}
           loop
           muted
           playsInline
