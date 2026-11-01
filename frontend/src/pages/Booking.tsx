@@ -31,6 +31,7 @@ const Booking = () => {
   const navigate = useNavigate();
   const { t, lang, toggleLang } = useLanguage();
   const [isLoading, setIsLoading] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -70,6 +71,7 @@ const Booking = () => {
   const value = async () => {
     try {
       setIsLoading(true);
+      setSubmitError("");
       const diff = 1;
       // if (new Date(formData.checkout).getTime() === new Date(formData.checkin).getTime()) {
       //   diff = 1;
@@ -110,12 +112,18 @@ const Booking = () => {
           navigate("/terms&conditions");
         }, 100);
       } else {
+        const message = data?.error === "Invalid booking details"
+          ? "Please review your booking details and check that all required fields are valid."
+          : "We couldn't submit your booking. Your details are still here; please try again.";
+        setSubmitError(message);
         setIsLoading(false);
-        toast.error("Booking failed. Please try again.");
+        toast.error(message);
       }
     } catch (e) {
+      const message = "We couldn't reach the booking service. Your details are still here; please try again shortly.";
+      setSubmitError(message);
       setIsLoading(false);
-      toast.error("An error occurred. Please try again.");
+      toast.error(message);
     }
 
   };
@@ -162,6 +170,11 @@ const Booking = () => {
             </p>
 
             <form onSubmit={handleSubmit} className="bg-card rounded-2xl p-8 border border-border space-y-6">
+              {submitError && (
+                <div role="alert" aria-live="polite" className="rounded-lg border border-destructive/40 bg-destructive/5 px-4 py-3 text-sm text-destructive">
+                  {submitError}
+                </div>
+              )}
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-semibold text-foreground font-body mb-1 block">{t("FullName")}</label>
