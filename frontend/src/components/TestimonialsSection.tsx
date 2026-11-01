@@ -26,7 +26,7 @@ const testimonials = [
 const TestimonialsSection = () => {
   const { t, toggleLang, lang } = useLanguage();
   return (
-    <section className="py-24 bg-card">
+    <section className="bg-card py-20 md:py-28">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -34,7 +34,7 @@ const TestimonialsSection = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <span className="text-primary font-semibold uppercase tracking-widest text-sm font-body">
+          <span className="eyebrow font-body">
             {t("testimonials")}
           </span>
           <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mt-3">
@@ -42,7 +42,7 @@ const TestimonialsSection = () => {
           </h2>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid gap-5 md:grid-cols-3">
           {testimonials.map((t, i) => (
             <motion.div
               key={t.name}
@@ -50,7 +50,7 @@ const TestimonialsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.15 }}
-              className="bg-background rounded-2xl p-8 border border-border"
+              className="group rounded-3xl border border-border/70 bg-background p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl md:p-8"
             >
               <Quote className="h-8 w-8 text-primary/30 mb-4" />
               <p className="text-foreground/80 font-body text-base leading-relaxed mb-6">"{t.text}"</p>

@@ -9,7 +9,7 @@ import publications from "@/assets/publications.jpg";
 const destinations = [
   { title: "Adventure Sports", rating: 4.9, image: destLake },
   { title: "Publications", rating: 4.8, image: publications },
-  { title: "Documentaries", rating: 4.8, image: documentriess },
+  { title: "Documentries", rating: 4.8, image: documentriess },
 ];
 
 const DestinationsSection = () => {

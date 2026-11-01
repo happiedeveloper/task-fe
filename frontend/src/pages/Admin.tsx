@@ -125,7 +125,7 @@ const Admin = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="bg-card rounded-xl p-6 border border-border"
+              className="rounded-2xl border border-border/70 bg-card p-5 shadow-sm transition hover:shadow-md md:p-6"
             >
               <div className="flex items-center justify-between mb-3">
                 <s.icon className="h-5 w-5 text-primary" />
@@ -137,8 +137,8 @@ const Admin = () => {
           ))}
         </div>
 
-        <div className="bg-card rounded-xl border border-border">
-          <div className="p-6 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="overflow-hidden rounded-3xl border border-border/70 bg-card shadow-sm">
+          <div className="flex flex-col justify-between gap-4 border-b border-border p-5 sm:flex-row sm:items-center md:p-7">
             <h2 className="font-display text-xl font-semibold text-card-foreground">Recent Bookings</h2>
             <div className="relative max-w-xs w-full">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />

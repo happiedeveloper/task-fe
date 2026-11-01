@@ -76,36 +76,36 @@ const AboutSection = () => {
               </Link>
             </div>
           </div>
-    <section id="about" className="py-24 bg-background">
+    <section id="about" className="bg-background py-20 md:py-28">
       <div className="container mx-auto px-4">
 
         {/* Heading */}
-        <div className="text-center">
-          <span className="text-primary font-semibold uppercase tracking-widest text-sm">
+        <div className="mx-auto mb-14 max-w-3xl text-center">
+          <span className="eyebrow">
             {t("whyus")}
           </span>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mt-3">
+          <h2 className="mt-4 font-display text-4xl font-bold text-foreground md:text-6xl">
             {t("trst")}
           </h2>
-          <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
+          <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
             {t("collab")}
           </p>
         </div>
 
-        <div className="grid md:grid-cols-4 gap-10">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {trustedPeople.map((person, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="bg-card rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition flex flex-col items-center"
+              className="group overflow-hidden rounded-3xl border border-border/70 bg-card text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
             >
               <img
                 src={person.image}
                 alt={person.name}
-                className={`w-80 object-contain object-cover text-center  ${person.role === "Associated Partner" ? "" : "rounded-full mx-auto"}`}
-                style={{height : 300}}
+                className={`h-64 w-full bg-muted object-cover transition duration-500 group-hover:scale-[1.03] ${person.role === "Associated Partner" ? "object-contain p-8" : "object-cover"}`}
+                
               />
               <div className="p-6 text-center">
                 <h3 className="text-xl font-semibold text-foreground">
