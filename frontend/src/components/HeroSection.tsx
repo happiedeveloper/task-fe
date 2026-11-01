@@ -64,11 +64,9 @@ const HeroSection = () => {
                 {t("bookAdventure")} <ArrowRight className="h-5 w-5" />
               </Button>
             </Link>
-            <a href="#destinations" className="hidden">
-              <Button size="lg" variant="outline" className="border-secondary-foreground/30 text-secondary-foreground hover:bg-secondary-foreground/10 text-lg px-8 py-6">
-                {t("exploreDestinations")}
-              </Button>
-            </a>
+            <Button asChild size="lg" variant="outline" className="border-secondary-foreground/30 text-secondary-foreground hover:bg-secondary-foreground/10 text-lg px-8 py-6">
+              <a href="#destinations">{t("exploreDestinations")}</a>
+            </Button>
           </motion.div>
 
           <motion.div
