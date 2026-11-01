@@ -23,9 +23,10 @@ const bookingSchema = new mongoose.Schema({
   checkout: [{ type: Date }],
   totalAmount: { type: Number, required: true },
   hiText: { type: String, required: true },
-  status: { type: String, enum: ["pending", "paid"], default: "pending" },
+  status: { type: String, enum: ["pending", "paid", "Waiting...", "confirmed", "cancelled"], default: "pending" },
   utrNumber: { type: String },
   paymentScreenshot: { type: String },
+  paymentAccessTokenHash: { type: String, select: false },
   guestDetails: {
     type: [guestSchema],
     default: [],
@@ -33,3 +34,4 @@ const bookingSchema = new mongoose.Schema({
 });
 
 export default mongoose.model("Booking", bookingSchema);
+

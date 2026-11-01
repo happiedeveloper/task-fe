@@ -14,6 +14,7 @@ import Payment from "./pages/Payment";
 import GettingTouch from "./pages/GettingTouch";
 import FloatingButtons from "./components/FloatingButtonsWrapper";
 import AboutSection from "./components/AboutSection";
+import ProtectedAdmin from "./components/ProtectedAdmin";
 
 const queryClient = new QueryClient();
 
@@ -28,7 +29,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/booking" element={<Booking />} />
           <Route path="/admin" element={<Admin />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/dashboard" element={<ProtectedAdmin><AdminDashboard /></ProtectedAdmin>} />
           <Route path="/terms&conditions" element={<TermsAndConditions />} />
           <Route path="/scanPayment" element={<Payment />} />
           <Route path="/gettingTouch" element={<GettingTouch />} />
@@ -43,3 +44,4 @@ const App = () => (
 );
 
 export default App;
+

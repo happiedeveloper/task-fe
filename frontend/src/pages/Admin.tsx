@@ -15,6 +15,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { supabase } from "@/integrations/supabase/client";
+import { API_BASE_URL } from "@/lib/api";
 const stats = [
   { icon: Users, label: "Total Bookings", value: "156", change: "+12%" },
   { icon: Calendar, label: "This Month", value: "24", change: "+8%" },
@@ -24,29 +26,38 @@ const stats = [
 
 const statusColor: Record<string, string> = {
   confirmed: "bg-primary/15 text-primary border-primary/30",
+  paid: "bg-primary/15 text-primary border-primary/30",
   pending: "bg-warm-gold/15 text-warm-gold border-warm-gold/30",
   cancelled: "bg-destructive/15 text-destructive border-destructive/30",
   "Waiting...": "bg-blue-500/15 text-blue-600 border-blue-500/30",
 };
 
+type BookingRow = {
+  _id: string; name: string; email: string; phone: string; altPhone?: string; destination: string; age: number;
+  checkin: string[]; checkout: string[]; guests: number; totalAmount: number; status: string; paymentScreenshot?: string;
+  utrNumber?: string; guestDetails: Array<{ name: string; age: number; bloodGroup: string; diabetes: boolean }>;
+};
+
 async function patchBooking(id: string, status: string) {
-  const url = `https://task-fe-75yw.onrender.com/api/admin/booking/${id}?key=suhas_is_admin`;
-  // const url = `http://localhost:5000/api/admin/booking/${id}?key=suhas_is_admin`;
+  const { data } = await supabase.auth.getSession();
+  const token = data.session?.access_token;
+  if (!token) throw new Error("Administrator session expired");
+  const url = `${API_BASE_URL}/api/admin/booking/${id}`;
   await fetch(url, {
     method: "PATCH",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
     body: JSON.stringify({ status }),
   });
-  if(status === "confirmed"){
-    await sendEmail(id);
+  if(status === "paid"){
+    await sendEmail(id, token);
   }
 }
 
-async function sendEmail(booking: string) {
+async function sendEmail(booking: string, token: string) {
    try{
-          const emailResp = await fetch("https://task-fe-75yw.onrender.com/api/verify-payment", {
+          const emailResp = await fetch(`${API_BASE_URL}/api/verify-payment`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
           body: JSON.stringify({ bookingId: booking }),
           })
         }catch (err){
@@ -58,14 +69,27 @@ async function sendEmail(booking: string) {
 
 const Admin = () => {
   const [status, setStatus] = useState<keyof typeof statusColor>("pending");
-  const [mockBookings, setMockBookings] = useState([])
+  const [mockBookings, setMockBookings] = useState<BookingRow[]>([])
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
   useEffect(() => {
     async function fetchBookings() {
-      const response = await fetch("https://task-fe-75yw.onrender.com/api/admin/bookings?key=suhas_is_admin");
-      const data = await response.json();
-      setMockBookings(data);
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (!sessionData.session) return;
+      const response = await fetch(`${API_BASE_URL}/api/admin/bookings`, {
+        headers: { Authorization: `Bearer ${sessionData.session.access_token}` },
+      });
+      if (!response.ok) return;
+      const bookings = await response.json();
+      setMockBookings(bookings);
+      const screenshots = await Promise.all(bookings.filter((b) => b.paymentScreenshot).map(async (b) => {
+        const image = await fetch(`${API_BASE_URL}/api/admin/upload/${encodeURIComponent(b.paymentScreenshot)}`, {
+          headers: { Authorization: `Bearer ${sessionData.session.access_token}` },
+        });
+        return image.ok ? [b.paymentScreenshot, URL.createObjectURL(await image.blob())] as const : null;
+      }));
+      setImageUrls(Object.fromEntries(screenshots.filter((item): item is NonNullable<typeof item> => item !== null)));
     }
     fetchBookings();
   }, [])
@@ -143,7 +167,7 @@ const Admin = () => {
                   <TableHead className="font-body">Download</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
+        <TableBody>
                 {filtered.map((b) => (
                   <React.Fragment key={b._id}>
                     <TableRow>
@@ -182,12 +206,12 @@ const Admin = () => {
                       <TableCell className="font-semibold">
                         {b.paymentScreenshot && <div className="font-semibold text-card-foreground">
                           <img
-                            src={`https://task-fe-75yw.onrender.com/uploads/${b.paymentScreenshot}`}
+                            src={imageUrls[b.paymentScreenshot]}
                             alt="Payment Proof"
                             style={{ width: "100px" }}
                             onClick={() =>
                               setPreviewImage(
-                                `https://task-fe-75yw.onrender.com/uploads/${b.paymentScreenshot}`
+                                imageUrls[b.paymentScreenshot]
                               )
                             }
                           />
@@ -287,3 +311,4 @@ const Admin = () => {
 };
 
 export default Admin;
+

@@ -5,20 +5,21 @@ import { useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { useLanguage } from "@/LanguageContext";
 import Navbar from "@/components/Navbar";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function AdminLogin() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const {t, toggleLang, lang} = useLanguage();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email === "admin@.com" && password === "Hexa25698") {
-      navigate("/admin/dashboard");
-    } else {
-      alert("Invalid credentials");
-    }
+    setError("");
+    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+    if (signInError) { setError("Unable to sign in. Check your credentials and administrator access."); return; }
+    navigate("/admin/dashboard");
   };
 
   return (
@@ -35,19 +36,21 @@ export default function AdminLogin() {
     <div className="flex md:items-center justify-center">
       <div className="bg-card rounded-xl border border-border p-8 max-w-md w-full">
         <h1 className="font-display text-2xl font-bold text-card-foreground mb-6">Admin Login</h1>
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-card-foreground mb-1">Email</label>
-            <Input id="email" type="email" placeholder="admin@example.com" onChange={(e)=>{setEmail(e.target.value)}} />
+            <Input id="email" type="email" autoComplete="username" placeholder="admin@example.com" value={email} onChange={(e)=>setEmail(e.target.value)} required />
           </div>
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-card-foreground mb-1">Password</label>
-            <Input id="password" type="password" placeholder="••••••••" onChange={(e)=>{setPassword(e.target.value)}} />
+            <Input id="password" type="password" autoComplete="current-password" placeholder="••••••••" value={password} onChange={(e)=>setPassword(e.target.value)} required />
           </div>
-          <Button type="submit" className="w-full" onClick={handleSubmit}>Login</Button>
+          {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
+          <Button type="submit" className="w-full">Login</Button>
         </form>
       </div>
     </div>
     </div>
   );
 }
+
